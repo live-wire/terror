@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF8">
+    <title>Incidents</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="app.css"/>
+    <script src="d3.v3.js"></script>
+    <style>
+        *{
+            font-family: 'Roboto', sans-serif !important;
+        }
+    </style>
+</head>
+<body style="background:#ffffff">
+  <h2 style="color:#666666;text-align:center">Number of incidents each year</h2>
+  <p style="color:#aaaaaa;text-align:center">
+    Click on the bar to delete it.
+  </p>
+  <div style="display:none">
+    <button onclick="window.changeData()">New</button>
+    <button onclick="window.appendData()">Append</button>
+    <button onclick="window.sortData()">Sort</button>
+  </div>
+  <svg id="chart"></svg>
+  </p>
+  <div style="display:none">
+    <button onclick="window.changeData()">New</button>
+    <button onclick="window.appendData()">Append</button>
+    <button onclick="window.sortData()">Sort</button>
+  </div>
+  <div class="trans-fore" style = "position:absolute;top: 10%;left: 10%;background: teal;color: #ffffff;padding: 10px;border-radius: 4px;font-weight: bold;border: 4px solid teal;font-size: xx-large;">
+    <div id="tooltip">Year : Incidents</div>
+  </div>
+
+  <script>
+  if(window.location.origin=="http://localhost:8000"){
+    window.extrapath = "";
+  }
+  else
+  {
+    window.extrapath = "/terror";
+  }
+  </script>
+
+  <span style="background:rgba(0,0,0,0.5);padding:20px;position:fixed;bottom:0px;left:0px;color:#fff;">
+      Jump links:
+      &nbsp;&nbsp;
+      <span style="background:#da4f49;color:#fff;padding:10px;border-radius:5px;cursor:pointer;" onclick="window.location.href = window.location.origin+window.extrapath+'/chart1/';">Incidents</span>
+      &nbsp;&nbsp;
+      <span style="background:#da4f49;color:#fff;padding:10px;border-radius:5px;cursor:pointer;" onclick="window.location.href = window.location.origin+window.extrapath+'/chart2/';">Casualities</span>
+      &nbsp;&nbsp;
+      <span style="background:#da4f49;color:#fff;padding:10px;border-radius:5px;cursor:pointer;" onclick="window.location.href = window.location.origin+window.extrapath+'/chart3/';">Weapons</span>
+      &nbsp;&nbsp;
+  </span>
+
+  <script src="app.js"></script>
+
+</body>
+</html>

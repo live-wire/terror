@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF8">
+    <title>Weapons</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <!--<link href="app.css"/>-->
+    <script src="d3.v3.js"></script>
+    <style>
+        *{
+            font-family: 'Roboto', sans-serif !important;
+        }
+    </style>
+</head>
+<body style="background:#bcbcbc">
+<h2 style="color:#ffffff;position:absolute;top:0;left:10%;">Frequency of weapon types used by the terrorist groups</h2>
+<script>
+    var diameter = 900; //max size of the bubbles
+
+
+    var color    = d3.scale.category20(); //color category
+
+var bubble = d3.layout.pack()
+    .sort(null)
+    .size([diameter, diameter])
+    .padding(1.5);
+
+var svg = d3.select("body")
+    .append("svg")
+    .attr("width", diameter)
+    .attr("height", diameter)
+    .attr("class", "bubble");
+
+d3.csv("flare.csv", function(error, data){
+
+    //convert numerical values from strings to numbers
+    data = data.map(function(d){ d.value = +d["Amount"]; return d; });
+
+    //bubbles needs very specific format, convert data to this.
+    var nodes = bubble.nodes({children:data}).filter(function(d) { return !d.children; });
+
+    //setup the chart
+    var bubbles = svg.append("g")
+        .attr("transform", "translate(0,0)")
+        .selectAll(".bubble")
+        .data(nodes)
+        .enter();
+
+    //create the bubbles
+    bubbles.append("circle")
+        .attr("r", function(d){ return d.r; })
+        .attr("cx", function(d){ return d.x; })
+        .attr("cy", function(d){ return d.y; })
+        .attr("weapon",function(d){return d["Weapon"];})
+        .style("fill", function(d) { return color(d.value); });
+
+    //format the text for each bubble
+    /*bubbles.append("text")
+        .attr("x", function(d){ return d.x; })
+        .attr("y", function(d){ return d.y + 5; })
+        .attr("text-anchor", "middle")
+        .text(function(d){ return d["Weapon"]; })
+        .style({
+            "fill":"white",
+            "font-size": "12px"
+        });*/
+})
+function hideToolTip()
+{
+    var temp = document.getElementById("tooltiplegend");
+    if(temp)
+    {
+        temp.parentElement.removeChild(temp);
+    }
+}
+
+function showToolTip(e,val)
+{
+    var tip = document.createElement('span');
+    tip.id = "tooltiplegend";
+    tip.style.padding="5px";
+    tip.style.background="#333";
+    tip.style.color="#fff";
+    tip.innerHTML = val;
+    tip.style.position = "absolute";
+    tip.style.left= ''+ e.pageX + 'px';
+    tip.style.top=''+ e.pageY + 'px';
+    hideToolTip();
+    document.body.appendChild(tip);
+}
+
+
+setTimeout(function(){
+var tab = document.createElement('table');
+tab.style.position = "absolute";
+tab.style.top="0";
+tab.style.right="20%";
+tab.style.borderRadius="4px";
+tab.style.padding="5px";
+tab.style.margin="5px";
+tab.style.background="#444";
+var circles = document.getElementsByTagName('circle');
+for(var i=0;i<circles.length;i++){
+    var tr = document.createElement('tr');
+    tr.innerHTML = "<td style='background:"+circles[i].style.fill+"'>&nbsp;</td><td style='color:#ffffff;'>"+circles[i].attributes.weapon.value+"</td>";
+    tab.appendChild(tr);
+    (function(ilocal){
+    circles[ilocal].addEventListener("mouseover", function( event ) {
+        showToolTip(event,circles[ilocal].attributes.weapon.value);
+    });
+    circles[ilocal].addEventListener("mouseleave",function(e){
+        hideToolTip();
+    });
+    })(i);
+
+}
+document.body.appendChild(tab);
+document.getElementsByTagName('svg')[0].style.marginTop="-5%";
+
+
+},500);
+
+
+
+</script>
+
+<script>
+  if(window.location.origin=="http://localhost:8000"){
+    window.extrapath = "";
+  }
+  else
+  {
+    window.extrapath = "/terror";
+  }
+  </script>
+
+  <span style="background:rgba(0,0,0,0.5);padding:20px;position:fixed;bottom:0px;left:0px;color:#fff;">
+      Jump links:
+      &nbsp;&nbsp;
+      <span style="background:#da4f49;color:#fff;padding:10px;border-radius:5px;cursor:pointer;" onclick="window.location.href = window.location.origin+window.extrapath+'/chart1/';">Incidents</span>
+      &nbsp;&nbsp;
+      <span style="background:#da4f49;color:#fff;padding:10px;border-radius:5px;cursor:pointer;" onclick="window.location.href = window.location.origin+window.extrapath+'/chart2/';">Casualities</span>
+      &nbsp;&nbsp;
+      <span style="background:#da4f49;color:#fff;padding:10px;border-radius:5px;cursor:pointer;" onclick="window.location.href = window.location.origin+window.extrapath+'/chart3/';">Weapons</span>
+      &nbsp;&nbsp;
+  </span>
+
+</body></html>

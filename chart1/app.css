@@ -1,0 +1,73 @@
+
+#tooltip {
+  position: absolute;
+  background-color: rgba(255, 255, 255, .8);
+  border: solid 1px #ccc;
+  border-radius: 4px;
+  padding: 5px;
+  visibility: hidden;
+  transition: all 0.5s;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #ccc;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font-size: 10px;
+}
+
+.nostroke line {
+  stroke: none;
+}
+
+.axis text,
+.noselect {
+  text-decoration: none;
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE/Edge */
+  user-select: none;
+  /* non-prefixed version, currently
+  not supported by any browser */
+}
+
+.axis text,
+.noselect {
+  cursor: default;
+}
+
+.trans-fore {
+  pointer-events: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10001;
+}
+
+.label {
+  pointer-events: none;
+  text-anchor: middle;
+}
+rect:hover {
+  fill: orange;
+}
+
+rect {
+  transition: fill 0.3s;
+  margin: .1px;
+}
+
+

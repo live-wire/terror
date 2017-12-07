@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF8">
+    <title>DataVis</title>
+
+    <style>
+        *{
+            font-family: 'Roboto', sans-serif !important;
+        }
+        body {
+  background: -webkit-linear-gradient(left, #aaaaaa 20px, transparent 1%) center, -webkit-linear-gradient(#aaaaaa 20px, transparent 1%) center, #bbb;
+  background: linear-gradient(90deg, #aaa 20px, transparent 1%) center, linear-gradient(#aaa 20px, transparent 1%) center, #bbb;
+  background-size: 22px 22px;
+}
+    </style>
+</head>
+<body><br><br><br><br>
+<h1 style="text-align:center;color:#ffffff;font-size:-webkit-xxx-large">Data Visualization (IN4086-14)</h1><br>
+<p style="text-align:center;color:#ffffff;font-size:xx-large">InfoVis Project</p>
+<script>
+  if(window.location.origin=="http://localhost:8000"){
+    window.extrapath = "";
+  }
+  else
+  {
+    window.extrapath = "/terror";
+  }
+ </script><br><br>
+<div style="width:100%;text-align:center;"><span style="text-align:center;color:#fff;padding:20px;background:rgba(0,0,0,0.6);border-radius:5px;cursor:pointer;" onclick="window.location.href = window.location.origin+window.extrapath+'/chart1/';">Global Terrorism Database</span></div>
+
+</body>
+</html>
