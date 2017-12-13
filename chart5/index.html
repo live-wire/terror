@@ -52,8 +52,9 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
 <script src="datamaps.world.min.js"></script>
 <div style="width:100%;height:600px;" id="bothcontainer">
-    <div id="container" style="position: relative; width: 70%; height: 600px;display:inline-block"></div>
-    <div style="position:absolute;right:10%;top:40%;color:#666666;font-weight:bold;"><span>Preferred attack types of </span><span id="currentGroup" style="color:#da4f49"></span></div>
+    <div id="container" style="position: relative; width: 70%; height: 600px;display:inline-block" onclick="plotmap();"></div>
+    <div style="position:absolute;right:10%;top:40%;color:#666666;font-weight:bold;" onclick="plotmap();"><span>Preferred attack types of </span><span id="currentGroup" style="color:#da4f49"></span></div>
+    <div style="position:absolute;left:10%;top:20%;color:#da4f49;font-weight:bold;" id="mapfilter"></div>
     <div id="chart" style="display:inline-block"></div>
 
 
@@ -114,7 +115,7 @@ function updateColor()
 }
 updateColor();
 
-window.plotmap = function(){
+window.plotmap = function(type){
     document.getElementById("container").innerHTML = "";
     var bubble_map = new Datamap({
       element: document.getElementById("container"),
@@ -135,7 +136,25 @@ window.plotmap = function(){
         SIX:'red'
       }
     });
-    bubble_map.bubbles(bubble_data_global[window.currentGroup], {
+
+    if(type)
+    {
+        plotdata = [];
+        for(var z=0;z<bubble_data_global[window.currentGroup].length;z++)
+        {
+            if(bubble_data_global[window.currentGroup][z]['type'] == type)
+            {
+                plotdata.push(bubble_data_global[window.currentGroup][z]);
+            }
+        }
+        document.getElementById('mapfilter').innerHTML = "FILTER : "+type;
+    }
+    else
+    {
+        plotdata = bubble_data_global[window.currentGroup];
+        document.getElementById('mapfilter').innerHTML = "";
+    }
+    bubble_map.bubbles(plotdata, {
       popupTemplate: function(geo, data) {
         return '<div class="hoverinfo">' + data["type"] + ' by ' + window.currentGroup + ' in '+data['y']+'</div>';
       }
@@ -148,6 +167,8 @@ plotmap();
 
 
 <script>
+
+
 
 function pierefresh()
 {
@@ -163,7 +184,7 @@ function pierefresh()
         "Hostage Taking (Kidnapping)","Unarmed Assault","Unknown"];
         var corrlabels = ["Assault","Assassination","Bombing",
         "Facility","Hijacking","Hostage","Kidnapping","Unarmed","Unknown"];
-        for(var ij = 1;ij<attacktypes.length;ij++)
+        for(var ij = 0;ij<attacktypes.length;ij++)
         {
             var t = {};
             t['label'] = ""+corrlabels[ij];
@@ -263,6 +284,9 @@ function pierefresh()
             tooltip.select('.percent').html(percent + '%');
             tooltip.style('display', 'block');
           });
+          path.on('click',function(d){
+             plotmap(d['data']['data']);
+          });
 
           path.on('mouseout', function() {
             tooltip.style('display', 'none');
@@ -287,6 +311,10 @@ function pierefresh()
               var vert = i * height - offset;
               return 'translate(' + horz + ',' + vert + ')';
             });
+
+          legend.on('click',function(d){
+            plotmap();
+          });
 
           legend.append('rect')
             .attr('width', legendRectSize)
