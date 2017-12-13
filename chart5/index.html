@@ -13,25 +13,25 @@
     <script src = "bubble_data.js"></script>
     <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css" rel="stylesheet" data-semver="3.0.1" data-require="normalize@*" />
     <style>
-      #chart {                                                          /* NEW */
-        height: 360px;                                                  /* NEW */
-        position: relative;                                             /* NEW */
-        width: 360px;                                                   /* NEW */
-      }                                                                 /* NEW */
-      .tooltip {                                                        /* NEW */
-        background: #eee;                                               /* NEW */
-        box-shadow: 0 0 5px #999999;                                    /* NEW */
-        color: #333;                                                    /* NEW */
-        display: none;                                                  /* NEW */
-        font-size: 12px;                                                /* NEW */
-        left: 130px;                                                    /* NEW */
-        padding: 10px;                                                  /* NEW */
-        position: absolute;                                             /* NEW */
-        text-align: center;                                             /* NEW */
-        top: 95px;                                                      /* NEW */
-        width: 80px;                                                    /* NEW */
-        z-index: 10;                                                    /* NEW */
-      }                                                                 /* NEW */
+      #chart {
+        height: 360px;
+        position: relative;
+        width: 360px;
+      }
+      .tooltip {
+        background: #eee;
+        box-shadow: 0 0 5px #999999;
+        color: #333;
+        display: none;
+        font-size: 12px;
+        left: 130px;
+        padding: 10px;
+        position: absolute;
+        text-align: center;
+        top: 95px;
+        width: 80px;
+        z-index: 10;
+      }
       .legend {
         font-size: 12px;
       }
@@ -114,53 +114,6 @@ function updateColor()
 }
 updateColor();
 
-
-
-
-
-
-/*    var bubble_data = [
-  {
-    name: 'Not a bomb, but centered on Brazil',
-    radius: 23,
-    centered: 'BRA',
-    country: 'USA',
-    yeild: 0,
-    fillKey: 'USA',
-    date: '1954-03-01'
-  },
-  {
-    name: 'Not a bomb',
-    radius: 15,
-    yeild: 0,
-    country: 'USA',
-    centered: 'USA',
-    date: '1986-06-05',
-    significance: 'Centered on US',
-    fillKey: 'USA'
-  },
-  {
-    name: 'Castle Bravo',
-    radius: 25,
-    yeild: 15000,
-    country: 'USA',
-    significance: 'First dry fusion fuel "staged" thermonuclear weapon; a serious nuclear fallout accident occurred',
-    fillKey: 'USA',
-    date: '1954-03-01',
-    latitude: 11.415,
-    longitude: 165.1619
-  },{
-    name: 'Tsar Bomba',
-    radius: 5,
-    yeild: 50000,
-    fillKey: 'RUS',
-    significance: 'Largest thermonuclear weapon ever tested—scaled down from its initial 100 Mt design by 50%',
-    date: '1961-10-31',
-    latitude: 73.482,
-    longitude: 54.5854
-  }
-];*/
-
 window.plotmap = function(){
     document.getElementById("container").innerHTML = "";
     var bubble_map = new Datamap({
@@ -210,8 +163,6 @@ function pierefresh()
         "Hostage Taking (Kidnapping)","Unarmed Assault","Unknown"];
         var corrlabels = ["Assault","Assassination","Bombing",
         "Facility","Hijacking","Hostage","Kidnapping","Unarmed","Unknown"];
-
-        //var colorsavailable = ["purple","pink","blue","maroon","red","orangered","violet","indigo"];
         for(var ij = 1;ij<attacktypes.length;ij++)
         {
             var t = {};
@@ -232,22 +183,6 @@ function pierefresh()
                 }
             }
         }
-        var aColor = [
-            'rgb(178, 55, 56)',
-            '#8a89a6',
-            'maroon',
-            'purple',
-            'blue',
-            'indigo',
-            'rgb(230, 125, 126)',
-            'rgb(178, 55, 56)',
-            'maroon',
-            'purple',
-            'indigo',
-            'blue',
-            'rgb(178, 55, 56)',
-            'rgb(230, 125, 126)'
-        ]
         var ddd = [];
         for(var ij = 0;ij<dataset.length;ij++)
         {
@@ -290,22 +225,20 @@ function pierefresh()
           .value(function(d) { return d.count; })
           .sort(null);
 
-        var tooltip = d3.select('#chart')                               // NEW
-          .append('div')                                                // NEW
-          .attr('class', 'tooltip');                                    // NEW
+        var tooltip = d3.select('#chart')
+          .append('div')
+          .attr('class', 'tooltip');
 
-        tooltip.append('div')                                           // NEW
-          .attr('class', 'label');                                      // NEW
+        tooltip.append('div')
+          .attr('class', 'label');
 
-        tooltip.append('div')                                           // NEW
-          .attr('class', 'count');                                      // NEW
+        tooltip.append('div')
+          .attr('class', 'count');
 
-        tooltip.append('div')                                           // NEW
-          .attr('class', 'percent');                                    // NEW
+        tooltip.append('div')
+          .attr('class', 'percent');
 
 
-        var weekdays = "label,count\nAM,	739.43\nBA,	365.79\nCE,	235.34\nDF,	229.14\nES,	159.08\nGO,	82.02";
-        //d3.csv('weekdays.csv', function(error, dataset) {
         dataset = data;
           dataset.forEach(function(d) {
             d.count = +d.count;
@@ -320,26 +253,26 @@ function pierefresh()
               return color(d.data.label);
             });
 
-          path.on('mouseover', function(d) {                            // NEW
-            var total = d3.sum(dataset.map(function(d) {                // NEW
-              return d.count;                                           // NEW
-            }));                                                        // NEW
-            var percent = Math.round(1000 * d.data.count / total) / 10; // NEW
-            tooltip.select('.label').html(d.data.label);                // NEW
-            tooltip.select('.count').html(d.data.count);                // NEW
-            tooltip.select('.percent').html(percent + '%');             // NEW
-            tooltip.style('display', 'block');                          // NEW
-          });                                                           // NEW
+          path.on('mouseover', function(d) {
+            var total = d3.sum(dataset.map(function(d) {
+              return d.count;
+            }));
+            var percent = Math.round(1000 * d.data.count / total) / 10;
+            tooltip.select('.label').html(d.data.label);
+            tooltip.select('.count').html(d.data.count);
+            tooltip.select('.percent').html(percent + '%');
+            tooltip.style('display', 'block');
+          });
 
-          path.on('mouseout', function() {                              // NEW
-            tooltip.style('display', 'none');                           // NEW
-          });                                                           // NEW
+          path.on('mouseout', function() {
+            tooltip.style('display', 'none');
+          });
 
           /* OPTIONAL
-          path.on('mousemove', function(d) {                            // NEW
-            tooltip.style('top', (d3.event.pageY + 10) + 'px')          // NEW
-              .style('left', (d3.event.pageX + 10) + 'px');             // NEW
-          });                                                           // NEW
+          path.on('mousemove', function(d) {
+            tooltip.style('top', (d3.event.pageY + 10) + 'px')
+              .style('left', (d3.event.pageX + 10) + 'px');
+          });
           */
 
           var legend = svg.selectAll('.legend')
