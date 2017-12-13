@@ -19,6 +19,7 @@ except:
     # Renaming Columns, Dimensionality Reduction (Too many features initially, Renaming some features and keeping only some features for use)
     data['casualities'] = data['Killed'] + data['Wounded']
     joblib.dump(data,'data.pkl')
+# print(data)
 
 # Checking for null values
 # print(data.isnull().sum())
@@ -92,12 +93,12 @@ firstBarChart = data[['Year','Country']].groupby(['Year']).agg(['count'])
 
 
 # CHART 3 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-weapon_sums = {}
-for weapon in data['Weapon_type']:
-    if weapon in weapon_sums:
-        weapon_sums[weapon] = weapon_sums[weapon]+1
-    else:
-        weapon_sums[weapon] = 1
+# weapon_sums = {}
+# for weapon in data['Weapon_type']:
+#     if weapon in weapon_sums:
+#         weapon_sums[weapon] = weapon_sums[weapon]+1
+#     else:
+#         weapon_sums[weapon] = 1
 # print(weapon_sums)
 # Use weapon_sums for the weapons bubble chart
 
@@ -105,74 +106,135 @@ for weapon in data['Weapon_type']:
 
 
 # CHART 4 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-chart4data = {"name": "flare","description": "flare","children": []}
-countries = {}
-countrysums = {}
-for index,row in data[['city','Country']].iterrows():
-    if row['Country'] in countries:
-        if row['city'] in countries[row['Country']]['cities']:
-            countries[row['Country']]['cities'][row['city']]['size'] =  countries[row['Country']]['cities'][row['city']]['size'] + 1
-        else:
-            temp = {"name":row['city'],"description":"city","size":1}
-            countries[row['Country']]['cities'][row['city']] = temp
-    else:
-        temp = {"name":row['Country'],"description":"country","cities":{}}
-        countries[row['Country']] = temp
-
-    if row['Country'] in countrysums:
-        countrysums[row['Country']] = countrysums[row['Country']]+1
-    else:
-        countrysums[row['Country']] = 1
-top15countries = []
-for i in range(15):
-    max = 0
-    keymax = ""
-    temp = {}
-    for key in countrysums:
-        if countrysums[key]>max:
-            max = countrysums[key]
-            keymax = key
-    temp[keymax] = max
-    del countrysums[keymax]
-    top15countries.append(keymax)
-for key in countries:
-    if key in top15countries:
-
-        top5cities = []
-        obj = dict(countries[key]['cities'])
-        for i in range(5):
-            if obj == {}:
-                break
-            max = 0
-            keymax = ""
-            for city in obj:
-                if obj[city]['size'] > max:
-                    max = obj[city]['size']
-                    keymax = city
-            top5cities.append(obj[keymax])
-            del obj[keymax]
-        others = {"name":"Other cities","description":"city","size":0}
-        if obj == {}:
-            pass
-        else:
-            for city in obj:
-                others['size'] = others['size'] + obj[city]['size']
-            top5cities.append(others)
-        temp = {"name":countries[key]['name'],"description":countries[key]['description']}
-        temparr = []
-        for i in top5cities:
-            temparr.append(i)
-        temp['children'] = temparr
-        chart4data['children'].append(temp)
-f = open('chart4.json','w')
-f.write(json.dumps(chart4data))
-f.close()
-print(json.dumps(chart4data))
-
-
+# chart4data = {"name": "flare","description": "flare","children": []}
+# countries = {}
+# countrysums = {}
+# for index,row in data[['city','Country']].iterrows():
+#     if row['Country'] in countries:
+#         if row['city'] in countries[row['Country']]['cities']:
+#             countries[row['Country']]['cities'][row['city']]['size'] =  countries[row['Country']]['cities'][row['city']]['size'] + 1
+#         else:
+#             temp = {"name":row['city'],"description":"city","size":1}
+#             countries[row['Country']]['cities'][row['city']] = temp
+#     else:
+#         temp = {"name":row['Country'],"description":"country","cities":{}}
+#         countries[row['Country']] = temp
+#
+#     if row['Country'] in countrysums:
+#         countrysums[row['Country']] = countrysums[row['Country']]+1
+#     else:
+#         countrysums[row['Country']] = 1
+# top15countries = []
+# for i in range(15):
+#     max = 0
+#     keymax = ""
+#     temp = {}
+#     for key in countrysums:
+#         if countrysums[key]>max:
+#             max = countrysums[key]
+#             keymax = key
+#     temp[keymax] = max
+#     del countrysums[keymax]
+#     top15countries.append(keymax)
+# for key in countries:
+#     if key in top15countries:
+#
+#         top5cities = []
+#         obj = dict(countries[key]['cities'])
+#         for i in range(5):
+#             if obj == {}:
+#                 break
+#             max = 0
+#             keymax = ""
+#             for city in obj:
+#                 if obj[city]['size'] > max:
+#                     max = obj[city]['size']
+#                     keymax = city
+#             top5cities.append(obj[keymax])
+#             del obj[keymax]
+#         others = {"name":"Other cities","description":"city","size":0}
+#         if obj == {}:
+#             pass
+#         else:
+#             for city in obj:
+#                 others['size'] = others['size'] + obj[city]['size']
+#             top5cities.append(others)
+#         temp = {"name":countries[key]['name'],"description":countries[key]['description']}
+#         temparr = []
+#         for i in top5cities:
+#             temparr.append(i)
+#         temp['children'] = temparr
+#         chart4data['children'].append(temp)
+# f = open('chart4.json','w')
+# f.write(json.dumps(chart4data))
+# f.close()
+# print(json.dumps(chart4data))
 # CHART 4 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 # CHART 5 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+# dropping rows that don't have latitude longitude data
+
+try:
+    xoxo = joblib.load('dumpchart5.pkl')
+    f = open('d3/chart5/bubble_data.js', 'w')
+    f.write("var bubble_data_global = " + str(xoxo['solo_data']) + ";")
+    f.close()
+except:
+    latlongdata = data[data["latitude"]==data["latitude"]]
+
+    # getting the top 15 terrorist groups based on number of incidents
+    x = latlongdata.groupby('Group')['Region'].nunique()
+    top50groups = x.sort_values(axis=0,ascending=False).head(15)
+    groupdata= {}
+    bubble_data = []
+    solo_data = {}
+
+    for index,row in latlongdata[['latitude','longitude','AttackType','Group','Year','casualities']].iterrows():
+        if row['Group'] in top50groups.keys():
+            temp = {}
+            temp['latitude'] = row['latitude']
+            temp['longitude'] = row['longitude']
+            temp['type'] = row['AttackType']
+
+            calc = (float(row['casualities'])/float(500))*12
+            temp['radius'] = 8 + calc
+
+            if 'Armed' in row['AttackType']:
+                temp['fillKey'] = 'ONE'
+            elif 'Bombing' in row['AttackType']:
+                temp['fillKey'] = 'TWO'
+            elif 'Unarmed' in row['AttackType']:
+                temp['fillKey'] = 'SIX'
+            elif 'Unknown' in row['AttackType']:
+                temp['fillKey'] = 'FIVE'
+            elif 'Hostage' in row['AttackType']:
+                temp['fillKey'] = 'FOUR'
+            else:
+                temp['fillKey'] = 'THREE'
+
+            temp['y'] = row['Year']
+            # temp['Group'] = row['Group']
+            bubble_data.append(temp)
+            if row['Group'] in solo_data:
+                solo_data[row['Group']].append(temp)
+            else:
+                solo_data[row['Group']] = []
+                solo_data[row['Group']].append(temp)
+            if row['Group'] in groupdata:
+                if row['AttackType'] in groupdata[row['Group']]:
+                    groupdata[row['Group']][row['AttackType']] = groupdata[row['Group']][row['AttackType']]+1
+                else:
+                    groupdata[row['Group']][row['AttackType']] = 1
+            else:
+                groupdata[row['Group']] = {}
+                groupdata[row['Group']][row['AttackType']] = 1
+    print(top50groups.keys())
+    print(solo_data)
+
+    dumpchart5 = {'solo_data':solo_data,'groups':top50groups.keys()}
+    joblib.dump(dumpchart5,'dumpchart5.pkl');
+
+
 # CHART 5 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 # CHART 6 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
