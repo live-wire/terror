@@ -1,3 +1,8 @@
+# DATA PREPROCESSING / PREPARATION
+# for
+# https://live-wire.github.io/terror/
+
+
 import pandas as pd
 from sklearn.externals import joblib
 import json
@@ -28,6 +33,8 @@ except:
 # data = joblib.load('/Users/dhruv/PycharmProjects/kaggle/dataviz/data.pkl')
 
 
+
+# https://live-wire.github.io/terror/chart1/
 # CHART 1 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 #
 firstBarChart = data[['Year','Country']].groupby(['Year']).agg(['count'])
@@ -35,142 +42,159 @@ firstBarChart = data[['Year','Country']].groupby(['Year']).agg(['count'])
 # create a 2d array from this for plotting the incidents graph
 # CHART 1 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+
+
+
+# https://live-wire.github.io/terror/chart2/
 # CHART 2 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 # ----COMMENTING HEAVY OPERATION------
-#
-#
-# casualties = [{'key':'Killed','values':[]},{'key':'Wounded','values':[]}]
-# countrykilledsums = {}
-# countrywoundedsums = {}
-# countrycasualitiessums = {}
-#
-# for index,row in data[['Country','Killed','Wounded','casualities']].iterrows():
-#     if row['Country'] in countrykilledsums:
-#         countrykilledsums[row['Country']] = countrykilledsums[row['Country']] + row['Killed']
-#     else:
-#         countrykilledsums[row['Country']] = row['Killed']
-#     if row['Country'] in countrywoundedsums:
-#         countrywoundedsums[row['Country']] = countrywoundedsums[row['Country']] + row['Wounded']
-#     else:
-#         countrywoundedsums[row['Country']] = row['Wounded']
-#     if row['Country'] in countrycasualitiessums:
-#         countrycasualitiessums[row['Country']] = countrycasualitiessums[row['Country']] + row['casualities']
-#     else:
-#         countrycasualitiessums[row['Country']] = row['casualities']
-#
-# top15 = [];
-# for i in range(15):
-#     max = 0
-#     keymax = ""
-#     temp = {}
-#     for key in countrycasualitiessums:
-#         if countrycasualitiessums[key]>max:
-#             max = countrycasualitiessums[key]
-#             keymax = key
-#     temp[keymax] = max
-#     del countrycasualitiessums[keymax]
-#     top15.append(temp)
-#
-# for item in top15:
-#     key = ''
-#     for k in item:
-#         key = k
-#     tempkilled = {}
-#     tempkilled['label'] = key
-#     tempkilled['value'] = -countrykilledsums[key]
-#     casualties[0]['values'].append(tempkilled)
-#     tempwounded = {}
-#     tempwounded['label'] = key
-#     tempwounded['value'] = countrywoundedsums[key]
-#     casualties[1]['values'].append(tempwounded)
-# print(json.dumps(casualties))
-#  USE this dump of causalities for plotting the 3rd graph
-#
-#
+
+
+casualties = [{'key':'Killed','values':[]},{'key':'Wounded','values':[]}]
+countrykilledsums = {}
+countrywoundedsums = {}
+countrycasualitiessums = {}
+
+for index,row in data[['Country','Killed','Wounded','casualities']].iterrows():
+    if row['Country'] in countrykilledsums:
+        countrykilledsums[row['Country']] = countrykilledsums[row['Country']] + row['Killed']
+    else:
+        countrykilledsums[row['Country']] = row['Killed']
+    if row['Country'] in countrywoundedsums:
+        countrywoundedsums[row['Country']] = countrywoundedsums[row['Country']] + row['Wounded']
+    else:
+        countrywoundedsums[row['Country']] = row['Wounded']
+    if row['Country'] in countrycasualitiessums:
+        countrycasualitiessums[row['Country']] = countrycasualitiessums[row['Country']] + row['casualities']
+    else:
+        countrycasualitiessums[row['Country']] = row['casualities']
+
+top15 = [];
+for i in range(15):
+    max = 0
+    keymax = ""
+    temp = {}
+    for key in countrycasualitiessums:
+        if countrycasualitiessums[key]>max:
+            max = countrycasualitiessums[key]
+            keymax = key
+    temp[keymax] = max
+    del countrycasualitiessums[keymax]
+    top15.append(temp)
+
+for item in top15:
+    key = ''
+    for k in item:
+        key = k
+    tempkilled = {}
+    tempkilled['label'] = key
+    tempkilled['value'] = -countrykilledsums[key]
+    casualties[0]['values'].append(tempkilled)
+    tempwounded = {}
+    tempwounded['label'] = key
+    tempwounded['value'] = countrywoundedsums[key]
+    casualties[1]['values'].append(tempwounded)
+print(json.dumps(casualties))
+# USE this dump of causalities for plotting the 3rd graph
+
+
 # ----COMMENTING HEAVY OPERATION------
 #
 # CHART 2 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
+
+
+# https://live-wire.github.io/terror/chart3/
 # CHART 3 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-# weapon_sums = {}
-# for weapon in data['Weapon_type']:
-#     if weapon in weapon_sums:
-#         weapon_sums[weapon] = weapon_sums[weapon]+1
-#     else:
-#         weapon_sums[weapon] = 1
-# print(weapon_sums)
+weapon_sums = {}
+for weapon in data['Weapon_type']:
+    if weapon in weapon_sums:
+        weapon_sums[weapon] = weapon_sums[weapon]+1
+    else:
+        weapon_sums[weapon] = 1
+print(weapon_sums)
 # Use weapon_sums for the weapons bubble chart
 
 # CHART 3 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
+
+
+# https://live-wire.github.io/terror/chart4/
 # CHART 4 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-# chart4data = {"name": "flare","description": "flare","children": []}
-# countries = {}
-# countrysums = {}
-# for index,row in data[['city','Country']].iterrows():
-#     if row['Country'] in countries:
-#         if row['city'] in countries[row['Country']]['cities']:
-#             countries[row['Country']]['cities'][row['city']]['size'] =  countries[row['Country']]['cities'][row['city']]['size'] + 1
-#         else:
-#             temp = {"name":row['city'],"description":"city","size":1}
-#             countries[row['Country']]['cities'][row['city']] = temp
-#     else:
-#         temp = {"name":row['Country'],"description":"country","cities":{}}
-#         countries[row['Country']] = temp
-#
-#     if row['Country'] in countrysums:
-#         countrysums[row['Country']] = countrysums[row['Country']]+1
-#     else:
-#         countrysums[row['Country']] = 1
-# top15countries = []
-# for i in range(15):
-#     max = 0
-#     keymax = ""
-#     temp = {}
-#     for key in countrysums:
-#         if countrysums[key]>max:
-#             max = countrysums[key]
-#             keymax = key
-#     temp[keymax] = max
-#     del countrysums[keymax]
-#     top15countries.append(keymax)
-# for key in countries:
-#     if key in top15countries:
-#
-#         top5cities = []
-#         obj = dict(countries[key]['cities'])
-#         for i in range(5):
-#             if obj == {}:
-#                 break
-#             max = 0
-#             keymax = ""
-#             for city in obj:
-#                 if obj[city]['size'] > max:
-#                     max = obj[city]['size']
-#                     keymax = city
-#             top5cities.append(obj[keymax])
-#             del obj[keymax]
-#         others = {"name":"Other cities","description":"city","size":0}
-#         if obj == {}:
-#             pass
-#         else:
-#             for city in obj:
-#                 others['size'] = others['size'] + obj[city]['size']
-#             top5cities.append(others)
-#         temp = {"name":countries[key]['name'],"description":countries[key]['description']}
-#         temparr = []
-#         for i in top5cities:
-#             temparr.append(i)
-#         temp['children'] = temparr
-#         chart4data['children'].append(temp)
-# f = open('chart4.json','w')
-# f.write(json.dumps(chart4data))
-# f.close()
-# print(json.dumps(chart4data))
+chart4data = {"name": "flare","description": "flare","children": []}
+countries = {}
+countrysums = {}
+for index,row in data[['city','Country']].iterrows():
+    if row['Country'] in countries:
+        if row['city'] in countries[row['Country']]['cities']:
+            countries[row['Country']]['cities'][row['city']]['size'] =  countries[row['Country']]['cities'][row['city']]['size'] + 1
+        else:
+            temp = {"name":row['city'],"description":"city","size":1}
+            countries[row['Country']]['cities'][row['city']] = temp
+    else:
+        temp = {"name":row['Country'],"description":"country","cities":{}}
+        countries[row['Country']] = temp
+
+    if row['Country'] in countrysums:
+        countrysums[row['Country']] = countrysums[row['Country']]+1
+    else:
+        countrysums[row['Country']] = 1
+top15countries = []
+for i in range(15):
+    max = 0
+    keymax = ""
+    temp = {}
+    for key in countrysums:
+        if countrysums[key]>max:
+            max = countrysums[key]
+            keymax = key
+    temp[keymax] = max
+    del countrysums[keymax]
+    top15countries.append(keymax)
+for key in countries:
+    if key in top15countries:
+
+        top5cities = []
+        obj = dict(countries[key]['cities'])
+        for i in range(5):
+            if obj == {}:
+                break
+            max = 0
+            keymax = ""
+            for city in obj:
+                if obj[city]['size'] > max:
+                    max = obj[city]['size']
+                    keymax = city
+            top5cities.append(obj[keymax])
+            del obj[keymax]
+        others = {"name":"Other cities","description":"city","size":0}
+        if obj == {}:
+            pass
+        else:
+            for city in obj:
+                others['size'] = others['size'] + obj[city]['size']
+            top5cities.append(others)
+        temp = {"name":countries[key]['name'],"description":countries[key]['description']}
+        temparr = []
+        for i in top5cities:
+            temparr.append(i)
+        temp['children'] = temparr
+        chart4data['children'].append(temp)
+f = open('chart4.json','w')
+f.write(json.dumps(chart4data))
+f.close()
+print(json.dumps(chart4data))
 # CHART 4 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+
+
+
+
+
+
+# https://live-wire.github.io/terror/chart5/
 # CHART 5 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 # dropping rows that don't have latitude longitude data
 
@@ -233,13 +257,6 @@ except:
 
     dumpchart5 = {'solo_data':solo_data,'groups':top50groups.keys()}
     joblib.dump(dumpchart5,'dumpchart5.pkl');
-
-
 # CHART 5 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-# CHART 6 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-# CHART 6 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-# CHART 7 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-# CHART 7 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
